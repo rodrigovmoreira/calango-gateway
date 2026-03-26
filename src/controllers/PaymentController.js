@@ -1,4 +1,5 @@
 import { PaymentFactory } from '../services/PaymentFactory.js';
+import Transaction from '../models/Transaction.js';
 
 class PaymentController {
   /**
@@ -17,13 +18,32 @@ class PaymentController {
       // 1. Instancia a estratégia correta (Stripe, PagBank, Pix)
       const strategy = PaymentFactory.create(method);
 
+      // 1.5. Registra a transação no banco como pending
+      const transaction = new Transaction({
+        tenantId,
+        orderId,
+        amount,
+        gateway: method,
+        status: 'pending'
+      });
+      await transaction.save();
+
       // 2. Processa o pagamento usando as credenciais específicas do restaurante (Tenant)
       // Passamos as credentials para que o Gateway seja "stateless" (não precise de DB próprio agora)
       const result = await strategy.process(amount, orderId, credentials);
 
       if (!result.success) {
+        transaction.status = 'failed';
+        transaction.rawResponse = result.error || result;
+        await transaction.save();
         return res.status(402).json(result);
       }
+
+      // Atualiza a transação com ID do gateway e os detalhes
+      transaction.transactionId = result.transactionId;
+      transaction.status = result.status || 'pending';
+      transaction.rawResponse = result;
+      await transaction.save();
 
       return res.status(201).json(result);
 

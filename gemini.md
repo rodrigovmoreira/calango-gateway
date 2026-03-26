@@ -1,7 +1,7 @@
 # 🐊 Calango Gateway - Documentação de Contexto
 
 ## 📌 Visão Geral
-O **Calango Gateway** é um microsserviço de abstração de pagamentos multi-tenant e stateless. Ele serve como uma camada intermediária entre os produtos do ecossistema Calango (ex: Calango Food e Calango Bot) e os provedores de pagamento (Stripe, PagBank, Pix).
+O **Calango Gateway** é um microsserviço de abstração de pagamentos multi-tenant e stateless. Ele serve como uma camada intermediária entre os produtos do ecossistema da Calango.Inc (ex: Calango Food e Calango Bot) e os provedores de pagamento (Stripe, PagBank, Pix e outros).
 
 ## 🚀 Arquitetura e Tech Stack
 - **Runtime:** Node.js v20+ (ESM) para suporte nativo a Top-Level Await e módulos modernos.
@@ -10,11 +10,24 @@ O **Calango Gateway** é um microsserviço de abstração de pagamentos multi-te
 
 - **Padrões de Projeto:**
 
-- **Strategy Pattern:** Isola a lógica de cada provedor (Stripe, PagBank) em classes intercambiáveis.
+- **Strategy Pattern:** Isola a lógica de cada provedor (Stripe, PagBank e outros) em classes intercambiáveis.
 
 - **Factory Pattern:** Instancia dinamicamente o provedor correto baseado no method ou provider solicitado.
 
 - **Adapter Pattern:** Traduz webhooks heterogêneos para o formato padrão "Calango Standard".
+
+## 🤖 Instruções para Agentes de IA (Prompting)
+
+### 1. Contexto de Atuação
+Ao ler este arquivo, você deve atuar como um Desenvolvedor Sênior especializado em Node.js e Arquitetura de Microsserviços. 
+
+### 2. Restrições de Código
+- Sempre utilize **ESM (import/export)**.
+- Nunca sugira padrões que acoplem o Gateway ao projeto solicitante (Calango Food).
+- Mantenha a lógica de **Strategy Pattern** para novos provedores.
+
+### 3. Fluxo de Pensamento
+Antes de sugerir qualquer alteração, verifique se ela respeita a interface `PaymentStrategy.js` e o formato de retorno padronizado definido na seção de Regras de Ouro.
 
 ## 🛠️ Estruturas Principais
 ### 1. PaymentStrategy (Interface)
@@ -30,12 +43,12 @@ Define o contrato obrigatório para todos os provedores. Cada novo provedor deve
 - **cors**: Configurado para aceitar requisições apenas de domínios internos do ecossistema Calango.
 
 ### 2. Multi-Tenancy
-O gateway não armazena chaves de API. O projeto solicitante (Calango Food) deve enviar as credenciais criptografadas do restaurante no corpo da requisição. Isso permite que cada restaurante use sua própria conta no Stripe/PagBank.
+O gateway não armazena chaves de API. O projeto solicitante (Calango Food) deve enviar as credenciais criptografadas do restaurante no corpo da requisição. Isso permite que cada restaurante use sua própria conta no provedor de pagamento.
 
 ## 📑 Fluxo de Pagamento
 1. Client (Frontend) -> Calango Food (Backend).
 2. Calango Food -> Calango Gateway (Porta 3010).
-3. Calango Gateway -> Provedor (Stripe/PagBank).
+3. Calango Gateway -> Provedor (Stripe/PagBank/Outros).
 4. Provedor -> Calango Gateway (Webhook).
 5. Calango Gateway -> Calango Food (Notificação de Sucesso).
 
@@ -61,6 +74,15 @@ O Gateway deve ser, preferencialmente, **Stateless**. Ele não deve buscar chave
 ### 4. Tratamento de Webhooks
 O `WebhookAdapter` é o único lugar onde a tradução de dados brutos dos bancos deve ocorrer. Ele converte os diferentes formatos (Stripe usa centavos, PagBank usa campos aninhados) em um objeto "Calango Standard".
 
+## ⚙️ Configuração de Ambiente (.env)
+
+### 1. Variáveis de Sistema
+- `PORT`: Define a porta de escuta do servidor (Padrão: 3010).
+- `NODE_ENV`: Define se o ambiente é `development` ou `production`.
+
+### 2. Segurança e Boas Práticas
+- O arquivo `.env` deve ser incluído no `.gitignore`.
+- Um arquivo `.env.example` deve ser mantido no repositório com as chaves vazias para orientar novos desenvolvedores ou IAs.
 
 ## 🚀 Estratégia de Disponibilidade
 
@@ -95,9 +117,25 @@ Diferente do banco do Calango Food, este banco foca exclusivamente em **Logs Tra
 - **Objetivo:** Registrar o histórico de todas as tentativas de pagamento.
 - **Campos Mandatórios:** `tenantId`, `orderId`, `gateway`, `amount` e `status`.
 - **Campo `rawResponse`:** É obrigatório salvar a resposta bruta do provedor para fins de suporte técnico e disputa de estornos (chargebacks).
+- **Chave Primária Logística:** `transactionId` (ID retornado pelo provedor externo).
+- **Relacionamento Externo:** `orderId` (ID do pedido no Calango Food) e `tenantId` (Identificador do lojista).
+- **Índices Críticos:** Devem ser criados índices para `tenantId` e `orderId` para otimizar buscas de reconciliação.
 
 ### 3. Integridade de Dados
 - Nenhuma transação deve ser excluída. Alterações de estado (ex: de `pending` para `paid`) devem ser registradas no array `webhookHistory` para manter a trilha de auditoria.
+
+## 📚 Referências e Benchmarking
+
+### 1. Modelo de Inspiração
+- **Categoria:** Payment Orchestration Layer (POL).
+- **Referência Open Source:** Hyperswitch (Juspay) e ProcessOut.
+- **Diferencial Calango:** Foco em Multi-tenancy simplificado para pequenos lojistas brasileiros (foco em Pix e taxas locais).
+
+### 2. Evolução de Roadmap (Inspirado em POLs)
+- **Fase 1:** Abstração Simples (O que estamos fazendo agora).
+- **Fase 2:** Smart Routing (Escolha automática de gateway por menor taxa).
+- **Fase 3:** Retentativa Automática (Se o provedor A falhar, tenta o B).
+- **Fase 4:** Dashboard de Conciliação Único (Ver vendas de todos os gateways em um só lugar).
 
 ---
 *Documento atualizado em: 26/03/2026*

@@ -86,5 +86,18 @@ O `WebhookAdapter` é o único lugar onde a tradução de dados brutos dos banco
 - O gerenciamento do processo Node.js é feito via **PM2**.
 - Logs de erro são armazenados localmente para auditoria de transações falhas.
 
+## 🗄️ Camada de Persistência (MongoDB)
+
+### 1. Database: `calango_gateway`
+Diferente do banco do Calango Food, este banco foca exclusivamente em **Logs Transacionais**.
+
+### 2. Coleção `Transactions`
+- **Objetivo:** Registrar o histórico de todas as tentativas de pagamento.
+- **Campos Mandatórios:** `tenantId`, `orderId`, `gateway`, `amount` e `status`.
+- **Campo `rawResponse`:** É obrigatório salvar a resposta bruta do provedor para fins de suporte técnico e disputa de estornos (chargebacks).
+
+### 3. Integridade de Dados
+- Nenhuma transação deve ser excluída. Alterações de estado (ex: de `pending` para `paid`) devem ser registradas no array `webhookHistory` para manter a trilha de auditoria.
+
 ---
 *Documento atualizado em: 26/03/2026*

@@ -3,6 +3,14 @@
 export class WebhookAdapter {
   static transform(payload, provider) {
     switch (provider) {
+      case 'pix':
+        return {
+          transactionId: payload.txid || payload.transactionId,
+          status: (payload.status === 'CONCLUIDO' || payload.status === 'PAID') ? 'paid' : 'failed',
+          amount: payload.valor || (payload.amount?.value ? payload.amount.value / 100 : payload.amount),
+          provider: 'pix'
+        };
+
       case 'stripe':
         return {
           transactionId: payload.id || payload.data?.object?.id,

@@ -1,5 +1,6 @@
 import { PaymentFactory } from '../services/PaymentFactory.js';
 import Transaction from '../models/Transaction.js';
+import { WebhookAdapter } from '../services/WebhookAdapter.js';
 
 class PaymentController {
   /**
@@ -57,15 +58,35 @@ class PaymentController {
    * Recebe notificações de confirmação dos bancos
    */
   async handleWebhook(req, res) {
-    const { provider } = req.params;
-    const payload = req.body;
+    try {
+      const { provider } = req.params;
+      const payload = req.body;
 
-    console.log(`📩 Webhook recebido do provedor: ${provider}`);
-    
-    // Aqui usaremos o WebhookAdapter que você já tem para padronizar a resposta
-    // e depois notificar o Calango Food via axios.post
-    
-    return res.status(200).send('OK');
+      console.log(`📩 Webhook recebido do provedor: ${provider}`);
+      
+      const standardizedData = WebhookAdapter.transform(payload, provider);
+      
+      const transaction = await Transaction.findOne({ transactionId: standardizedData.transactionId });
+      
+      if (transaction) {
+        transaction.status = standardizedData.status;
+        transaction.webhookHistory.push({
+          date: new Date(),
+          status: standardizedData.status,
+          payload: standardizedData
+        });
+        await transaction.save();
+        
+        // TODO: Notificar o Calango Food via axios.post()
+      } else {
+        console.warn(`⚠️ Transação não encontrada (Webhook ID: ${standardizedData.transactionId})`);
+      }
+
+      return res.status(200).send('OK');
+    } catch (error) {
+      console.error(`❌ [Calango Gateway] Erro no Webhook:`, error.message);
+      return res.status(400).json({ error: error.message });
+    }
   }
 }
 

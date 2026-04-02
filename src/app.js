@@ -11,7 +11,7 @@ app.use(express.json());
 // Rotas
 app.use('/v1/payments', paymentRoutes);
 
-// Health Check para monitorar o PC velho
+// Health Check para monitorar o status da aplicação
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'online', 

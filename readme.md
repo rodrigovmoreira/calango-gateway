@@ -1,4 +1,4 @@
-# 🐊 Calango Gateway
+# 🐊 Squamata Gateway
 
 O **Calango Gateway** é um microsserviço de abstração financeira de alto desempenho, projetado para centralizar e padronizar integrações com múltiplos provedores de pagamento (Stripe, PagBank, Pix, etc.) para todo o ecossistema de produtos Calango.
 

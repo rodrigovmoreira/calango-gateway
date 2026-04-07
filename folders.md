@@ -1,4 +1,4 @@
-calango-gateway/
+Squamata-gateway/
 ├── src/
 │   ├── config/
 │   │   └── db.js                # Configuração de conexão com o MongoDB

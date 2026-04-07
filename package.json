@@ -1,5 +1,5 @@
 {
-  "name": "calango-gateway",
+  "name": "squamata-gateway",
   "version": "1.0.0",
   "description": "Gateway de pagamentos para os Projetos da Calango Inc.",
   "main": "server.js",

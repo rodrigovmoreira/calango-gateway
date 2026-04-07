@@ -1,7 +1,7 @@
-# 🐊 Calango Gateway - Documentação de Contexto
+# 🐊 Squamata Gateway - Documentação de Contexto
 
 ## 📌 Visão Geral
-O **Calango Gateway** é um microsserviço de abstração de pagamentos multi-tenant e stateless. Ele serve como uma camada intermediária entre os produtos do ecossistema da Calango.Inc (ex: Calango Food e Calango Bot) e os provedores de pagamento (Stripe, PagBank, Pix e outros).
+O **Squamata Gateway** é um microsserviço de abstração de pagamentos multi-tenant e stateless. Ele serve como uma camada intermediária entre os produtos do ecossistema da Calango.Inc (ex: Calango Food e Calango Bot) e os provedores de pagamento (Stripe, PagBank, Pix e outros).
 
 ## 🚀 Arquitetura e Tech Stack
 - **Runtime:** Node.js v20+ (ESM) para suporte nativo a Top-Level Await e módulos modernos.
@@ -73,10 +73,10 @@ O gateway não armazena chaves de API. O projeto solicitante (Calango Food) deve
 
 ## 📑 Fluxo de Pagamento
 1. Client (Frontend) -> Calango Food (Backend).
-2. Calango Food -> Calango Gateway (Porta 3010).
-3. Calango Gateway -> Provedor (Stripe/PagBank/Outros).
-4. Provedor -> Calango Gateway (Webhook).
-5. Calango Gateway -> Calango Food (Notificação de Sucesso).
+2. Calango Food -> Squamata Gateway (Porta 3010).
+3. Squamata Gateway -> Provedor (Stripe/PagBank/Outros).
+4. Provedor -> Squamata Gateway (Webhook).
+5. Squamata Gateway -> Calango Food (Notificação de Sucesso).
 
 ## 📡 Endpoints v1
 - `POST /v1/payments/create`: Inicia uma transação.

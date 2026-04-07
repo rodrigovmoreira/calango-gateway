@@ -1,9 +1,9 @@
-# 🐊 Calango Gateway
+# 🐊 Squamata Gateway
 
-O **Calango Gateway** é um microsserviço de abstração financeira de alto desempenho, projetado para centralizar e padronizar integrações com múltiplos provedores de pagamento (Stripe, PagBank, Pix, etc.) para todo o ecossistema de produtos Calango.
+O **Squamata Gateway** é um microsserviço de abstração financeira de alto desempenho, projetado para centralizar e padronizar integrações com múltiplos provedores de pagamento (Stripe, PagBank, Pix, etc.) para todo o ecossistema de produtos Calango.
 
 ## 🚀 O Problema que Resolvemos
-Em vez de cada projeto (Calango Food, Calango Shop, etc.) implementar sua própria lógica de pagamento e lidar com APIs complexas de terceiros, eles apenas "plugam" o Calango Gateway. Isso garante:
+Em vez de cada projeto (Calango Food, Calango Shop, etc.) implementar sua própria lógica de pagamento e lidar com APIs complexas de terceiros, eles apenas "plugam" o Squamata Gateway. Isso garante:
 - **Código Limpo:** O projeto principal não conhece as regras de negócio do Stripe ou PagBank.
 - **Agilidade Multi-Tenant:** Cada restaurante/cliente usa suas próprias chaves de API sem que precisemos alterar o código core.
 - **Manutenção Centralizada:** Uma correção no Gateway atualiza todos os aplicativos conectados.

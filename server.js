@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 3010;
 connectDB().then(() => {
   app.listen(PORT, () => {
     showBanner();
-    console.log(`\x1b[36m%s\x1b[0m`, `🐊 Calango Gateway [ON]`);
+    console.log(`\x1b[36m%s\x1b[0m`, `🐊 Squamata Gateway [ON]`);
     console.log(`🚀 Porta: ${PORT}`);
     console.log(`📍 URL: http://localhost:${PORT}`);
   });
@@ -35,8 +35,8 @@ function showBanner() {
       console.log('\x1b[92m%s\x1b[0m', line);
     });
 
-    console.log('\x1b[32m%s\x1b[0m', '      Calango Gateway Online!\n');
+    console.log('\x1b[32m%s\x1b[0m', '      Squamata Gateway Online!\n');
   } catch (err) {
-    console.log('Calango Gateway Starting...');
+    console.log('Squamata Gateway Starting...');
   }
 }

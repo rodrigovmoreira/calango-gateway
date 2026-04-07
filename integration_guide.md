@@ -26,7 +26,7 @@ console.log(response.data);
 ```
 
 ### 3. O que o Calango Food vai receber de volta?
-De acordo com o contrato [gemini.md](file:///home/rmoreira/calango-gateway/gemini.md), a promessa de retorno no caso do PIX sandbox será:
+De acordo com o contrato [gemini.md](file:///home/rmoreira/Squamata-gateway/gemini.md), a promessa de retorno no caso do PIX sandbox será:
 
 ```json
 {

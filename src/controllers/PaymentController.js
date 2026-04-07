@@ -49,7 +49,7 @@ class PaymentController {
       return res.status(201).json(result);
 
     } catch (error) {
-      console.error(`❌ [Calango Gateway] Erro no processamento:`, error.message);
+      console.error(`❌ [Squamata Gateway] Erro no processamento:`, error.message);
       return res.status(500).json({ error: error.message });
     }
   }
@@ -84,7 +84,7 @@ class PaymentController {
 
       return res.status(200).send('OK');
     } catch (error) {
-      console.error(`❌ [Calango Gateway] Erro no Webhook:`, error.message);
+      console.error(`❌ [Squamata Gateway] Erro no Webhook:`, error.message);
       return res.status(400).json({ error: error.message });
     }
   }

@@ -1,5 +1,5 @@
-# 📖 Documentação Técnica: Calango Gateway
-Esta documentação detalha o papel de cada arquivo e diretório no ecossistema do Calango Gateway, um microsserviço focado em abstrair a complexidade de múltiplos provedores de pagamento.
+# 📖 Documentação Técnica: Squamata Gateway
+Esta documentação detalha o papel de cada arquivo e diretório no ecossistema do Squamata Gateway, um microsserviço focado em abstrair a complexidade de múltiplos provedores de pagamento.
 
 ## 📂 Arquivos de Inicialização (Root)
 server.js: O ponto de entrada (Bootstrap) do sistema. Ele é responsável por carregar as variáveis de ambiente, garantir que a conexão com o MongoDB seja estabelecida com sucesso e colocar o servidor para "escutar" na porta definida no .env.
